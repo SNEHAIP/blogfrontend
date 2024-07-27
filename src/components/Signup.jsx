@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Signup = () => {
     const [ input,setInput]=new useState(
@@ -18,11 +18,15 @@ const Signup = () => {
     }
     const readValue=()=>{
 if(input.password==input.confirmpassword){ 
+    alert("password and confirm password are same")
+    console.log(input)
   axios.post("http://localhost:8080/signup",input).then(
     (response)=>{
-        console.log(response.data)
+        console.log(input)
         if (response.data.status=="success") {
-            alert("registered successfully")
+         sessionStorage.setItem("token",response.data.token)
+         sessionStorage.setItem("userId",response.data.userId)
+         navigate("/")
 
             
         } else {
@@ -30,11 +34,7 @@ if(input.password==input.confirmpassword){
             
         }
     }
-  ).catch(
-    (error)=>{
-        console.log(error)
-    }
-  )
+  ).catch()
 }
 else{
     alert("password and confirm password doesnot match")
@@ -42,6 +42,7 @@ else{
 
       
     }
+    let navigate=useNavigate()
   return (
     <div>
         <div className="container">
@@ -80,7 +81,7 @@ else{
               
                 <div>
                 <br></br>
-            < p>New User <Link to = "/">CLICK HERE</Link></p>
+            < p>New User <Link to="/">CLICK HERE</Link></p>
                 </div>
             </div>
         </div>
