@@ -1,7 +1,9 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
+    const navigate=useNavigate()
     const [input, setInput] = useState(
         {
             "email": "",
@@ -18,11 +20,14 @@ const Login = () => {
 
         axios.post("http://localhost:8080/login", input).then(
             (response) => {
-                console.log(response.data)
+                console.log(input)
                 if (response.data.status == "success") {
-                    alert("logged in successfully")
-
-                } else {
+                   
+                   sessionStorage.setItem("userId",response.data.userId)
+                   sessionStorage.setItem("token",response.data.token)
+                   navigate("/add")
+                }
+                else{
                     alert(response.data.status)
                 }
 
@@ -35,6 +40,7 @@ const Login = () => {
             }
         )
     }
+    
     return (
         <div>
             <div className="container">
@@ -53,7 +59,7 @@ const Login = () => {
                                 <button onClick={readValue} className="btn btn-success">LOGIN</button >
                             </div>
                             <div className="col col-12 col-sm-12 col-lg-12 col-xl-12 col-xxl-12">
-                                <a href="" className="btn btn-primary">New User Click Here</a>
+                            < p>New User <Link to = "/signup">CLICK HERE</Link></p>
                             </div>
                         </div>
                     </div>
